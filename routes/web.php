@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,32 +18,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/hello', function () {
-    return "Hello Laravel";
-});
+Route::get('/hello', [\App\Http\Controllers\HelloController::class, "index"]);
 
-Route::get('/hello/array', function () {
-    return [
-        'message' => 'Hello Laravel',
-        'success' => true,
-        'error' => false,
-        'number' => 10
-    ];
-})->name('hello.array');
+Route::get('/hello/array', [\App\Http\Controllers\HelloController::class, "array"])->name('hello.array');
 
-Route::get('/posts/{id?}', function ($id = null) {
-    if($id === null){
-        return "All Posts";
-    }
-    return "Post ID: " . $id;
-});
+Route::get('/posts/{id?}', [\App\Http\Controllers\HelloController::class, "posts"]);
 
-Route::get('/about', function () {
-    return view('about', [
-        'name' => 'Your Name', 
-        'info' =>[
-            'address' => '<b>Kasetsart</b> University',
-            'email' => 'contact@ku.th<script>alert("Attack Code")</script>'
-        ]
-    ]);
-});
+
+
+Route::get('about',[\App\Http\Controllers\HelloController::class, "about"]);
+
+Route::get('apartments/{apartment}/rooms/create',
+    [\App\Http\Controllers\ApartmentController::class, 'createRoom'])
+    ->name('apartments.rooms.create');
+Route::resource('apartments',\App\Http\Controllers\ApartmentController::class);
+
+Route::resource('rooms',\App\Http\Controllers\RoomController::class);
